@@ -1,0 +1,9 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Included files in tarball:
+	Makefile: Associated makefile for lab4b. Contains default, clean, and dist.
+	lab3b.c: Source code for project that analyzes .csv output to check for block, inode allocation, and directory consistency.
+	README: This file.

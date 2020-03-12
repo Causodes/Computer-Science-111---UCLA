@@ -1,0 +1,18 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Included files in tarball:
+	Makefile: Associated makefile for lab4b. Contains default, clean, check, and dist.
+	lab4b.c: Source code for project that polls for temperature readings from a Grove Cape. Can periodically recieve and send commands.
+	tests.sh: Smoketest for the makefile that is used in check.
+	README: This file.
+	
+References:
+	http://wiki.seeedstudio.com/Grove-Temperature_Sensor_V1.2/
+	https://www.geeksforgeeks.org/fgets-gets-c-language/
+	http://pubs.opengroup.org/onlinepubs/007908799/xsh/systime.h.html
+	https://www.sanfoundry.com/c-program-illustrate-reading-datafile/
+	https://iotdk.intel.com/docs/master/mraa/aio_8h.html
+	https://iotdk.intel.com/docs/master/mraa/gpio_8h.html

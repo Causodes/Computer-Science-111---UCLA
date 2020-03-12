@@ -1,0 +1,27 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Included files in tarball:
+	lab0.c: source code for project
+	Makefile: associated makefile for lab0.c Contains default, check, clean, and dist
+	smoketest.sh: script used in Makefile that facilitates the running of smoke tests
+	backtrace.png: screenshot of gdb backtrace
+	breakpoint.png: screenshot of gdb breakpoint information
+
+Smoke Test Cases:
+	1. Confirm that reading and writing to and from files works without error.
+	2. Confirm input and output files are identical
+	3. Confirm that invalid arguments are caught (Error Code 1).
+	4. Confirm that being unable to read from input causes error (Error Code 2).
+	5. Confirm that being unable to write to output causes error (Error Code 3).
+	6. Confirm that segmentation faults are correctly caught (Error Code 4).
+
+Research Citations:
+	https://linux.die.net/man/3/getopt
+	https://linux.die.net/man/3/getopt_long
+	https://linux.die.net/man/3/creat
+	https://www.gnu.org/software/libc/manual/html_node/Using-Getopt.html
+	https://www.tutorialspoint.com/c_standard_library/c_function_signal.htm
+	https://www.rapidtables.com/code/linux/gcc.html

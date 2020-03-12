@@ -1,0 +1,16 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Included files in tarball:
+	Makefile: Associated makefile for lab3a. Contains default, clean, and dist.
+	lab4b.c: Source code for project that outputs information regarding a file system image, including superblock, groups, free blocks, free inodes, complete inodes, directories, and indirect references.
+	ext2_fs.h: Header file for library functions.
+	README: This file.
+	
+References:
+	http://www.nongnu.org/ext2-doc/ext2.html
+	http://cs.smith.edu/~nhowe/Teaching/csc262/oldlabs/ext2.html
+	http://man7.org/linux/man-pages/man8/debugfs.8.html
+	https://stackoverflow.com/questions/8266183/linking-with-gcc-and-lm-doesnt-define-ceil-on-ubuntu

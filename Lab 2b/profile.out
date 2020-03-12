@@ -1,0 +1,211 @@
+Total: 739 samples
+     636  86.1%  86.1%      739 100.0% thread_exec
+      84  11.4%  97.4%       84  11.4% __strcmp_sse42
+      10   1.4%  98.8%       64   8.7% SortedList_lookup
+       8   1.1%  99.9%       39   5.3% SortedList_insert
+       1   0.1% 100.0%        1   0.1% _init
+       0   0.0% 100.0%      739 100.0% __clone
+       0   0.0% 100.0%       64   8.7% delete_node
+       0   0.0% 100.0%      739 100.0% start_thread
+ROUTINE ====================== thread_exec in /u/cs/ugrad/yet/CS111/Lab2b/lab2_list.c
+   636    739 Total samples (flat / cumulative)
+     .      .   83: 
+     .      .   84: 
+     .      .   85: /**
+     .      .   86: Thread Execution:
+     .      .   87: */
+---
+     .      .   88: void *thread_exec(void *thread_counter) {
+     .      .   89: 	struct timespec start, stop;
+     .      .   90: 	int i;
+     .      .   91: 	for(i = (*(int *)thread_counter); i < num_threads * num_iterations; i+=num_threads) {
+     .      .   92: 		int index = hash(element[i].key);
+     .      .   93: 		switch(lock) {
+     .      .   94: 			case 'n':
+     .      .   95: 				SortedList_insert(&list[index], &element[i]);
+     .      .   96: 				break;
+     .      .   97: 			case 'm':
+     .      .   98: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .   99: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  100: 					exit(1);
+     .      .  101: 				}
+     .      .  102: 				pthread_mutex_lock(&mutex_array[index]);
+     .      .  103: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  104: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  105: 					exit(1);
+     .      .  106: 				}
+     .      .  107: 				SortedList_insert(&list[index], &element[i]);
+     .      .  108: 				pthread_mutex_unlock(&mutex_array[index]);
+     .      .  109: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  110: 				break;
+     .      .  111: 			case 's':
+     .      .  112: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  113: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  114: 					exit(1);
+     .      .  115: 				}
+   352    352  116: 				while (__sync_lock_test_and_set(&spin_lock_array[index], 1));
+     .      .  117: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  118: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  119: 					exit(1);
+     .      .  120: 				}
+     .     39  121: 				SortedList_insert(&list[index], &element[i]);
+     .      .  122: 				__sync_lock_release(&spin_lock_array[index]);
+     .      .  123: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  124: 				break;
+     .      .  125: 			default:
+     .      .  126: 				fprintf(stderr, "Error, unrecognized sync argument.\n");
+     .      .  127: 				exit(1);
+     .      .  128: 				break;
+     .      .  129: 		}
+     .      .  130: 	}
+     .      .  131: 	
+     .      .  132: 	SortedListElement_t *node = NULL;
+     1      1  133: 	for(i = (*(int *)thread_counter); i < num_threads * num_iterations; i+=num_threads) {
+     .      .  134: 		int index = hash(element[i].key);
+     .      .  135: 		switch(lock) {
+     .      .  136: 			case 'n':
+     .      .  137: 				delete_node(node, i, index);
+     .      .  138: 				break;
+     .      .  139: 			case 'm':
+     .      .  140: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  141: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  142: 					exit(1);
+     .      .  143: 				}
+     .      .  144: 				pthread_mutex_lock(&mutex_array[index]);
+     .      .  145: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  146: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  147: 					exit(1);
+     .      .  148: 				}
+     .      .  149: 				delete_node(node, i, index);
+     .      .  150: 				pthread_mutex_unlock(&mutex_array[index]);
+     .      .  151: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  152: 				break;
+     .      .  153: 			case 's':
+     .      .  154: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  155: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  156: 					exit(1);
+     .      .  157: 				}
+   283    283  158: 				while (__sync_lock_test_and_set(&spin_lock_array[index], 1));
+     .      .  159: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  160: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  161: 					exit(1);
+     .      .  162: 				}
+     .     64  163: 				delete_node(node, i, index);
+     .      .  164: 				__sync_lock_release(&spin_lock_array[index]);
+     .      .  165: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  166: 				break;
+     .      .  167: 			default:
+     .      .  168: 				fprintf(stderr, "Error, unrecognized sync argument.\n");
+     .      .  169: 				exit(1);
+     .      .  170: 				break;
+     .      .  171: 		}
+     .      .  172: 	}
+     .      .  173: 	return NULL;
+     .      .  174: }
+---
+     .      .  175: 
+     .      .  176: /**
+     .      .  177: Output Handling:
+     .      .  178: */
+     .      .  179: void output(struct timespec time_begin, struct timespec time_end) {
+ROUTINE ====================== thread_exec in /u/cs/ugrad/yet/CS111/Lab2b/lab2_list.c
+   636    739 Total samples (flat / cumulative)
+     .      .   83: 
+     .      .   84: 
+     .      .   85: /**
+     .      .   86: Thread Execution:
+     .      .   87: */
+---
+     .      .   88: void *thread_exec(void *thread_counter) {
+     .      .   89: 	struct timespec start, stop;
+     .      .   90: 	int i;
+     .      .   91: 	for(i = (*(int *)thread_counter); i < num_threads * num_iterations; i+=num_threads) {
+     .      .   92: 		int index = hash(element[i].key);
+     .      .   93: 		switch(lock) {
+     .      .   94: 			case 'n':
+     .      .   95: 				SortedList_insert(&list[index], &element[i]);
+     .      .   96: 				break;
+     .      .   97: 			case 'm':
+     .      .   98: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .   99: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  100: 					exit(1);
+     .      .  101: 				}
+     .      .  102: 				pthread_mutex_lock(&mutex_array[index]);
+     .      .  103: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  104: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  105: 					exit(1);
+     .      .  106: 				}
+     .      .  107: 				SortedList_insert(&list[index], &element[i]);
+     .      .  108: 				pthread_mutex_unlock(&mutex_array[index]);
+     .      .  109: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  110: 				break;
+     .      .  111: 			case 's':
+     .      .  112: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  113: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  114: 					exit(1);
+     .      .  115: 				}
+   352    352  116: 				while (__sync_lock_test_and_set(&spin_lock_array[index], 1));
+     .      .  117: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  118: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  119: 					exit(1);
+     .      .  120: 				}
+     .     39  121: 				SortedList_insert(&list[index], &element[i]);
+     .      .  122: 				__sync_lock_release(&spin_lock_array[index]);
+     .      .  123: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  124: 				break;
+     .      .  125: 			default:
+     .      .  126: 				fprintf(stderr, "Error, unrecognized sync argument.\n");
+     .      .  127: 				exit(1);
+     .      .  128: 				break;
+     .      .  129: 		}
+     .      .  130: 	}
+     .      .  131: 	
+     .      .  132: 	SortedListElement_t *node = NULL;
+     1      1  133: 	for(i = (*(int *)thread_counter); i < num_threads * num_iterations; i+=num_threads) {
+     .      .  134: 		int index = hash(element[i].key);
+     .      .  135: 		switch(lock) {
+     .      .  136: 			case 'n':
+     .      .  137: 				delete_node(node, i, index);
+     .      .  138: 				break;
+     .      .  139: 			case 'm':
+     .      .  140: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  141: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  142: 					exit(1);
+     .      .  143: 				}
+     .      .  144: 				pthread_mutex_lock(&mutex_array[index]);
+     .      .  145: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  146: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  147: 					exit(1);
+     .      .  148: 				}
+     .      .  149: 				delete_node(node, i, index);
+     .      .  150: 				pthread_mutex_unlock(&mutex_array[index]);
+     .      .  151: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  152: 				break;
+     .      .  153: 			case 's':
+     .      .  154: 				if(clock_gettime(CLOCK_MONOTONIC, &start) == -1) {
+     .      .  155: 					fprintf(stderr, "Error, invalid clock start time.\n");
+     .      .  156: 					exit(1);
+     .      .  157: 				}
+   283    283  158: 				while (__sync_lock_test_and_set(&spin_lock_array[index], 1));
+     .      .  159: 				if(clock_gettime(CLOCK_MONOTONIC, &stop) == -1) {
+     .      .  160: 					fprintf(stderr, "Error, invalid clock end time.\n");
+     .      .  161: 					exit(1);
+     .      .  162: 				}
+     .     64  163: 				delete_node(node, i, index);
+     .      .  164: 				__sync_lock_release(&spin_lock_array[index]);
+     .      .  165: 				total_time_array[(*(int *)thread_counter)] += (stop.tv_sec - start.tv_sec) * 1000000000 + (stop.tv_sec - start.tv_sec);
+     .      .  166: 				break;
+     .      .  167: 			default:
+     .      .  168: 				fprintf(stderr, "Error, unrecognized sync argument.\n");
+     .      .  169: 				exit(1);
+     .      .  170: 				break;
+     .      .  171: 		}
+     .      .  172: 	}
+     .      .  173: 	return NULL;
+     .      .  174: }
+---
+     .      .  175: 
+     .      .  176: /**
+     .      .  177: Output Handling:
+     .      .  178: */
+     .      .  179: void output(struct timespec time_begin, struct timespec time_end) {

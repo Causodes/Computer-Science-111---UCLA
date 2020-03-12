@@ -1,0 +1,18 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Included files in tarball:
+	Makefile: Associated makefile for lab4c. Contains default, clean, and dist.
+	lab4c_tcp.c: Source code for project that polls for temperature readings from a Grove Cape. Establish TCP connection with class server and waits for requests from server. Periodically receives commands and outputs time and temperature ratings.
+	lab4c_tls.c: Source code for project that polls for temperature readings from a Grove Cape. Establish TLS connection with class server and waits for requests from server. Periodically receives commands and outputs time and temperature ratings.
+	README: This file.
+	
+References:
+	http://wiki.seeedstudio.com/Grove-Temperature_Sensor_V1.2/
+	https://www.geeksforgeeks.org/fgets-gets-c-language/
+	http://pubs.opengroup.org/onlinepubs/007908799/xsh/systime.h.html
+	https://www.sanfoundry.com/c-program-illustrate-reading-datafile/
+	https://iotdk.intel.com/docs/master/mraa/aio_8h.html
+	https://iotdk.intel.com/docs/master/mraa/gpio_8h.html

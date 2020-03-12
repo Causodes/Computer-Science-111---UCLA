@@ -1,0 +1,18 @@
+NAME: Tian Ye
+EMAIL: tianyesh@gmail.com
+ID: 704931660
+SLIPDAYS: 0
+
+Serial Number: BBGW18100924
+MAC Address: 2CF7F1069E9B
+
+
+my_beaglebone.jpg: selfie with assembled Beaglebone
+connected.png: ifconfig output
+copy.png: verification of copying hello.c to the  Beaglebone.
+build_run.png: verification of running hello.c on the Beaglebone from a WIFI SSH session.
+git.png: verification of repository cloning using git.
+
+References:
+https://drive.google.com/drive/folders/0B6dyEb8VXZo-NzZwb1gzNTRvLXc
+https://drive.google.com/drive/folders/0B6dyEb8VXZo-T3VybUs2WTd4VFE
